@@ -69,7 +69,7 @@ class CustomInstallCommand(install):
 
 setup(
     name='larissa_boost',
-    version='0.0.1',
+    version='0.0.2',
     description='Boost library dependency building for larissa',
     long_description=long_description,
     url='https://github.com/owlz/larissa_boost',
