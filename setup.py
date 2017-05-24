@@ -46,7 +46,7 @@ def _install_boost():
 
     # Setup build
     try:
-        subprocess.check_output("./bootstrap.sh --prefix={0}".format(sys.prefix), shell=True)
+        subprocess.check_output("./bootstrap.sh --prefix={0}".format(os.path.join(sys.prefix,"boost")), shell=True)
     except Exception as e:
         raise Exception(e.output)
 
