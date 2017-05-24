@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 from codecs import open
 import os, sys
 from setuptools.command.install import install
-from setuptools.command.build import build
+from setuptools.command.build import build_ext
 import tempfile
 import shutil
 import urllib2
@@ -50,7 +50,7 @@ def _install_boost():
     except Exception as e:
         raise Exception(e.output)
 
-class CustomBuildCommand(build):
+class CustomBuildCommand(build_ext):
     """Need to custom compile boost."""
     def run(self):
         # Save off our dir
@@ -59,7 +59,7 @@ class CustomBuildCommand(build):
 
         # Make sure we're in the right place
         os.chdir(cwd)
-        install.run(self)
+        build_ext.run(self)
 
 setup(
     name='larissa_boost',
@@ -81,7 +81,7 @@ setup(
     keywords='libboost',
     packages=find_packages(exclude=['contrib', 'docs', 'tests','lib']),
     cmdclass={
-        'build': CustomBuildCommand,
+        'build_ext': CustomBuildCommand,
     },
 )
 
