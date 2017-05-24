@@ -12,6 +12,7 @@ import tarfile
 from glob import glob
 import multiprocessing
 import re
+import subprocessing
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -38,11 +39,16 @@ def _install_boost():
     os.chdir(dirs[0])
 
     # Setup build
-    os.system("./bootstrap.sh --prefix={0}".format(sys.prefix))
+    try:
+        subprocessing.check_output("./bootstrap.sh --prefix={0}".format(sys.prefix), shell=True)
+    except Exception as e:
+        raise Exception(e.output)
 
     # Build and install
-    os.system("./b2 install -j{0}".format(multiprocessing.cpu_count()))
-
+    try:
+        ret = subprocessing.check_output("./b2 install -j{0}".format(multiprocessing.cpu_count()), shell=True)
+    except Exception as e:
+        raise Exception(e.output)
 
 class CustomBuildCommand(build):
     """Need to custom compile boost."""
