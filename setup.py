@@ -4,15 +4,10 @@ from setuptools import setup, find_packages
 from codecs import open
 import os, sys
 from setuptools.command.install import install
-import tempfile
-import shutil
 import urllib2
 import tarfile
-from glob import glob
 import multiprocessing
-import re
 import subprocess
-import urllib2
 
 here = os.path.abspath(os.path.dirname(__file__))
 
