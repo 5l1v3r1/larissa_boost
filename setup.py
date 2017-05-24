@@ -12,7 +12,7 @@ import tarfile
 from glob import glob
 import multiprocessing
 import re
-import subprocessing
+import subprocess
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -40,13 +40,13 @@ def _install_boost():
 
     # Setup build
     try:
-        subprocessing.check_output("./bootstrap.sh --prefix={0}".format(sys.prefix), shell=True)
+        subprocess.check_output("./bootstrap.sh --prefix={0}".format(sys.prefix), shell=True)
     except Exception as e:
         raise Exception(e.output)
 
     # Build and install
     try:
-        ret = subprocessing.check_output("./b2 install -j{0}".format(multiprocessing.cpu_count()), shell=True)
+        ret = subprocess.check_output("./b2 install -j{0}".format(multiprocessing.cpu_count()), shell=True)
     except Exception as e:
         raise Exception(e.output)
 
