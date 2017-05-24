@@ -12,10 +12,14 @@ from glob import glob
 import multiprocessing
 import re
 import subprocess
+import urllib2
 
 here = os.path.abspath(os.path.dirname(__file__))
 
 long_description = "See website for more info."
+
+boost_name = "boost_1_64_0.tar.bz2"
+boost_url = "https://dl.bintray.com/boostorg/release/1.64.0/source/" + boost_name
 
 def find_file(file_name):
     """Locate the given file from our python root."""
@@ -27,8 +31,16 @@ def find_file(file_name):
 
 def _install_boost():
 
+    # Download it
+    response = urllib2.urlopen(boost_url)
+    
+    with open(boost_name,"wb") as f:
+        f.write(response.read())
+
+    response.close()
+
     # Extract the archive
-    tar = tarfile.open(glob("*.tar.bz2")[0])
+    tar = tarfile.open(boost_name)
     tar.extractall()
     tar.close()
 
