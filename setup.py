@@ -26,6 +26,7 @@ def find_file(file_name):
 
 def _install_boost():
 
+    print("Downloading boost")
     # Download it
     response = urllib2.urlopen(boost_url)
     
@@ -33,11 +34,13 @@ def _install_boost():
         f.write(response.read())
 
     response.close()
+    print(os.system("ls -lah *"))
 
     # Extract the archive
     tar = tarfile.open(boost_name)
     tar.extractall()
     tar.close()
+    print(os.system("ls -lah *"))
 
     # Find our new dir
     _, dirs, _ = next(os.walk("."))
@@ -46,22 +49,29 @@ def _install_boost():
 
     # Setup build
     try:
-        subprocess.check_output("./bootstrap.sh --prefix={0}".format(os.path.join(sys.prefix,"boost")), shell=True)
+        print("Running command: ./bootstrap.sh --prefix={0}".format(os.path.join(sys.prefix,"boost")))
+        print(subprocess.check_output("./bootstrap.sh --prefix={0}".format(os.path.join(sys.prefix,"boost")), shell=True))
     except Exception as e:
         raise Exception(e.output)
 
     # Build and install
     try:
-        ret = subprocess.check_output("./b2 install -j{0}".format(multiprocessing.cpu_count()), shell=True)
+        print("Running command: ./b2 install -j{0}".format(multiprocessing.cpu_count()))
+        print(subprocess.check_output("./b2 install -j{0}".format(multiprocessing.cpu_count()), shell=True))
     except Exception as e:
         raise Exception(e.output)
+
+    print(os.system("ls -la $VIRTUAL_ENV/"))
+    print(os.system("ls -la $VIRTUAL_ENV/include/"))
+    print(os.system("ls -la $VIRTUAL_ENV/boost/"))
+    print(os.system("ls -la $VIRTUAL_ENV/boost/include"))
 
 class CustomInstallCommand(install):
     """Need to custom compile boost."""
     def run(self):
         # Save off our dir
         cwd = os.getcwd()
-        self.execute(_install_boost, (), msg='Compiling/Installing z3')
+        self.execute(_install_boost, (), msg='Compiling/Installing Boost')
 
         # Make sure we're in the right place
         os.chdir(cwd)
