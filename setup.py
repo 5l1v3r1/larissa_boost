@@ -11,10 +11,10 @@ import subprocess
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-long_description = "See website for more info."
-
 boost_name = "boost_1_64_0.tar.bz2"
 boost_url = "https://dl.bintray.com/boostorg/release/1.64.0/source/" + boost_name
+
+long_description = "Local boost installer in a python package. Installs libboost into whatever virtual environment is active (or root if none active). Currently installing {0}".format(boost_name)
 
 def find_file(file_name):
     """Locate the given file from our python root."""
@@ -49,8 +49,8 @@ def _install_boost():
 
     # Setup build
     try:
-        print("Running command: ./bootstrap.sh --prefix={0}".format(os.path.join(sys.prefix,"boost")))
-        print(subprocess.check_output("./bootstrap.sh --prefix={0}".format(os.path.join(sys.prefix,"boost")), shell=True))
+        print("Running command: ./bootstrap.sh --prefix={0}".format(sys.prefix))
+        print(subprocess.check_output("./bootstrap.sh --prefix={0}".format(sys.prefix), shell=True))
     except Exception as e:
         raise Exception(e.output)
 
@@ -61,6 +61,8 @@ def _install_boost():
     except Exception as e:
         raise Exception(e.output)
 
+    # Debugging stuff
+    print(os.system("echo $VIRTUAL_ENV"))
     print(os.system("ls -la $VIRTUAL_ENV/"))
     print(os.system("ls -la $VIRTUAL_ENV/include/"))
     print(os.system("ls -la $VIRTUAL_ENV/boost/"))
@@ -79,7 +81,7 @@ class CustomInstallCommand(install):
 
 setup(
     name='larissa_boost',
-    version='0.0.3',
+    version='0.0.4',
     description='Boost library dependency building for larissa',
     long_description=long_description,
     url='https://github.com/owlz/larissa_boost',
